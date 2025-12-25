@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../CSS/Style.css">
+    <link rel="stylesheet" href="../CSS/locomotive-scroll.min.css">
+    <link rel="icon" href="../Images/LogoIPPIE.png">
+    <title>IPPIE | HOME</title>
+</head>
+<body>
+    <header>
+        <a href="../index.html">
+            <img src="../Images/LogoIPPIE com texto.png" alt="" id="logo">
+        </a>
+        <nav class="links">
+            <ul class="mainLinks">
+                <li class="link"><a href="../index.html">
+                    <span>Home</span>
+                    <span>Home</span>
+                </a></li>
+                <li class="link second"><a href="Sobre_nos.html">
+                    <span>Sobre Nós</span>
+                    <span>Sobre Nós</span>
+                </a>
+                <ul class="cursosdropdown">
+                    <li><a href="">Nossas Instalações</a></li>
+                    <li><a href="">Nossa Instituição</a></li>
+                    <li><a href="Bot.html">Bot de perguntas e respostas</a></li>
+                    <li><a href="">Galeria</a></li>
+                </ul>
+            </li>
+                <li class="link primer"><a href="Nossos_Cursos.html">
+                    <span>Nossos Cursos</span>
+                    <span>Nossos Cursos</span>
+                </a>
+                <ul class="cursosdropdown">
+                    <li><a href="">Técnico de Informática</a></li>
+                    <li><a href="">Gestão de Sistemas Informáticos</a></li>
+                    <li><a href="">Eletricidade e Instalações Eletricas</a></li>
+                    <li><a href="MM.html">Máquinas & Motores</a></li>
+                    <li><a href="">Desenhador Projetista</a></li>
+                </ul>
+            </li>
+                <li class="link"><a href="#">
+                    <span>Contacte-nos</span>
+                    <span>Contacte-nos</span>
+                </a></li>
+                <li class="link"><a href="Inscreva_se.html" class="btn">
+                    <span>Inscreva-se</span>
+                    <span>Inscreva-se</span>
+                </a></li>
+            </ul>
+        </nav>
+        <svg id="abrir-menu" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M10 4H4c-1.10457 0-2 .89543-2 2v12c0 1.1046.89543 2 2 2h6V4ZM7.79283 9.29289c.39053.39053.39053 1.02371 0 1.41421L6.5 11.9999l1.29283 1.2929c.39053.3905.39053 1.0237 0 1.4142-.39052.3905-1.02368.3905-1.41421 0l-1.99994-2c-.39052-.3905-.39052-1.0236 0-1.4142l1.99994-1.99991c.39053-.39052 1.02369-.39052 1.41421 0Z" clip-rule="evenodd"/>
+                <path d="M12 20h8c1.1046 0 2-.8954 2-2V6c0-1.10457-.8954-2-2-2h-8v16Z"/>
+        </svg>
+    </header>
+    <nav id="menu-mobile" class="menu-mobile">
+        <ul>
+            <li class=""><a href="../index.html">Home</a></li>
+            <li class=""><a href="Sobre_nos.html">Sobre Nós</a></li>
+            <li class=""><a href="#">Galeria</a></li>
+            <li class=""><a href="#">Nossos Cursos</a></li>
+            <li class=""><a href="#">Contacte-nos</a></li>
+            <li class=""><a href="Inscreva_se.html">Inscreva-se</a></li>
+        </ul>
+    </nav>
+    <div id="menu-mobileOverlay" class="menu-mobileOverlay"></div>
+    <main data-scroll-container>
+        <div class="bot">
+            <div class="questionBox">
+                <div class="info">
+                    <p>Insira a sua questão e espere uns 
+                       segundos para ver a resposta do 
+                       nosso bot (pode ser algo como: em 
+                       que horários atendem, que classes 
+                       lecionam, que cursos possuem e etc...)
+                    </p>
+                </div>
+                <div class="info">
+                    <p>Eu responderei a sua questão o mais 
+                       rápido possível...
+                    </p>
+                    <div class="messages" id="messages" role="log" aria-live="polite">
+                        <!-- Mensagens serão inseridas aqui dinamicamente -->
+                    </div>
+                </div>
+                <input  class="botElement" type="text" id="userInput" placeholder="Pergunte algo...(ex:'horário de abertura')" aria-label="Pergunta" />
+                <button id="sendMessage"></button>
+            </div>
+            <div class="FastInfo botElement"></div>
+        </div>
+    </main>
+    <div class="loading-screen">
+        <div class="loader">
+            <div class="loader-1 bar"></div>
+            <div class="loader-2 bar"></div>
+        </div>
+        <div class="counter">
+            <div class="counter-1 digit">
+                <div class="num">0</div>
+                <div class="num num1offset1">1</div>
+            </div>
+            <div class="counter-2 digit">
+                <div class="num">0</div>
+                <div class="num num1offset2">1</div>
+                <div class="num">2</div>
+                <div class="num">3</div>
+                <div class="num">4</div>
+                <div class="num">5</div>
+                <div class="num">6</div>
+                <div class="num">7</div>
+                <div class="num">8</div>
+                <div class="num">9</div>
+                <div class="num">0</div>
+            </div>
+            <div class="counter-3 digit">
+                <div class="num">0</div>
+                <div class="num">1</div>
+                <div class="num">2</div>
+                <div class="num">3</div>
+                <div class="num">4</div>
+                <div class="num">5</div>
+                <div class="num">6</div>
+                <div class="num">7</div>
+                <div class="num">8</div>
+                <div class="num">9</div>
+            </div>
+        </div>
+    </div>
+    <script src="../Libs/gsap.min.js"></script>
+    <script src="../Libs/ScrollTrigger.min.js"></script>
+    <script src="../Libs/locomotive-scroll.min.js"></script>
+    <script src="../JS/Index.js"></script>
+    <!-- Animações do loader e de texto -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            const counter3 = document.querySelector(".counter-3");
+
+            for( let i  = 0; i < 2; i++){
+                for( let j  = 0; j < 10; j++){
+                    const div = document.createElement("div");
+                    div.className = "num";
+                    div.textContent = j;
+                    counter3.appendChild(div);
+                }
+            }
+            const finalDiv = document.createElement("div");
+            finalDiv.className = "num";
+            finalDiv.textContent = "0";
+            counter3.appendChild(finalDiv);
+
+            function animate(counter, duration, delay = 0){
+                const numHeight = counter.querySelector(".num").clientHeight;
+                const totalDistance = (counter.querySelectorAll(".num").length - 1) * numHeight;
+                
+                gsap.to(counter, {
+                y: -totalDistance,
+                duration: duration,
+                delay: delay,
+                esse: "power2.inOut"
+            });
+            }
+
+            animate(counter3, 5);
+            animate(document.querySelector(".counter-2"), 6);
+            animate(document.querySelector(".counter-1"), 2, 4);
+        });
+         gsap.to(".digit", {
+            top: "-150px",
+            stagger: {
+                amount: 0.25,
+            },
+            delay: 6,
+            duration: 1,
+            ease: "power4.inOut",
+         });
+         gsap.to(".loader-1", {
+            width: 200,
+            duration: 6,
+            ease: "power2.inOut",
+         });
+         gsap.to(".loader-2", {
+            width: 100,
+            delay: 1.9,
+            duration: 2,
+            ease: "power2.inOut",
+         });
+         gsap.to(".loader", {
+            background: "none",
+            delay: 6,
+            duration: 6.1,
+         });
+         gsap.to(".loader-1", {
+            rotate: 90,
+            delay: 6,
+            y: -50,
+            duration: 0.5,
+         });
+         gsap.to(".loader-2", {
+            delay: 6,
+            x: -75,
+            y: 75,
+            duration: 0.5,
+         });
+         gsap.to(".loader", {
+            scale: 40,
+            delay: 7,
+            duration: 1,
+            ease: "power2.inOut"
+         });
+         gsap.to(".loader", {
+            rotate: 45,
+            y: 500,
+            x: 2000,
+            duration: 1,
+            delay: 7,
+            ease: "power2.inOut"
+         });
+         gsap.to(".loading-screen", {
+            opacity: 0,
+            duration: 0.5,
+            delay: 7.5,
+            ease: "power1.inOut"
+         });
+         gsap.from(".link", 1.5,{
+            opacity: 0,
+            y: -75,
+            delay: 7,
+            stagger:{
+                amount: 0.5,
+            },
+            ease: "power2.inOut"
+         });
+         gsap.from("#abrir-menu", 1,{
+            opacity: 0,
+            y: -75,
+            delay: 8,
+            ease: "power1.inOut",
+         });
+         gsap.from("#slider", 1,{
+            delay: 7.5,
+            scale: .9,
+            y: 5,
+         });
+         gsap.from(".control", 1,{
+            delay: 8,
+            y: -20,
+            stagger:{
+                amount:0.25,
+            },
+         })
+         gsap.from(".text1", 1.4,{
+            opacity: 0,
+            delay: 7.5,
+            y: 230,
+            ease: "power2.inOut",
+            stagger:{
+                amount: 0.25
+            },
+         })
+    </script>
+    <!-- Script do Titulo do Site -->
+    <script>
+         const tituloOriginal = document.title;
+
+            document.addEventListener("visibilitychange", () => {
+                if (document.visibilityState === "hidden") {
+                document.title = "Ei! Volte aqui 👀";
+                } else {
+                document.title = "🎉 Que bom que voltou!";
+                setTimeout(() => {
+                document.title = tituloOriginal;
+                }, 2000); // volta ao título original após 2s
+                }
+            });
+    </script>
+    <!-- Script do Locomotivescroll (rolagem suave) -->
+    <script>
+        const rolar = new LocomotiveScroll({
+            el: document.querySelector('[data-scroll-container]'),
+            smooth: true,
+            multiplier: 1,
+            inertia: 0.09
+        });
+    </script>
+</body>
+</html>

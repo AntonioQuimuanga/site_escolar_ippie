@@ -1,0 +1,31 @@
+@media (prefers-color-scheme: dark) {
+    #meios{
+        place-content: center;
+        margin-left: 50%;
+        transform: translate(-50%);
+        display: flex;
+        gap: 40px;
+        width: 100%;
+        text-align: center;
+    }
+    #meios div{
+        place-content: center;
+    }
+    .sugest{
+        position: relative;
+        height: 150px;
+        width: 250px;
+        border: solid;
+        border-radius: 0px 50px;
+        place-content: center;
+        background-color: #000000b4;
+        backdrop-filter: blur(9px);
+    }
+    .sugest p a{
+        z-index: 777777;
+        width: 100%;
+        text-decoration: none;
+        height: 100%;
+        background: #ffffff;
+    }
+}

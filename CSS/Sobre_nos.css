@@ -1,0 +1,30 @@
+.container h1{
+    font-family: 'Courier New', Courier, monospace;
+    margin-top: 100px;
+    text-transform: uppercase;
+    font-weight: 100;
+    margin-left: 30px;
+    font-size: calc(15px + 3vw);
+    width: 26ch;
+    border-right: 2px solid;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: write 3.3s forwards steps(26),
+               blink 0.5s infinite;
+}
+@keyframes blink {
+    0%{
+        border-color: transparent;
+    }
+}
+@keyframes write {
+    from{
+        width: 0ch;
+    }
+}
+@media screen and (max-width: 950px){
+    .container h1{
+        font-size: calc(15px + 2vw);
+        width: 26ch;
+    }
+}
