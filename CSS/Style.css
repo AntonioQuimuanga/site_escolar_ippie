@@ -67,7 +67,8 @@ header{
     top: 0;
     left: 10px;
     position: fixed;
-    height: auto;
+    /* height: auto; */
+    height: 70px;
     width: 200px;
 }
 header .mainLinks{
