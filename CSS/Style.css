@@ -854,6 +854,11 @@ footer{
     .dicas{
         height: 200vh;
     }
+    .linksDasRedes{
+        margin-left: 50%;
+        transform: translate(-50%);
+        gap: 10px;
+    }
 }
 /* Tablets e telefones grandes */
 @media screen and (max-width: 950px) {
