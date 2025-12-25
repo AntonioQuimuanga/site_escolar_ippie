@@ -67,6 +67,7 @@ header{
     top: 0;
     left: 10px;
     position: fixed;
+    object-fit: cover;
     /* height: auto; */
     height: 70px;
     width: 200px;
