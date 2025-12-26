@@ -60,6 +60,7 @@ header{
     position: fixed;
     align-items: center;
     place-content: center;
+    /* height: 70px; */
     height: 70px;
     width: 100%;
 }
