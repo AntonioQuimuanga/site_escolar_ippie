@@ -12,6 +12,68 @@
     animation: write 3.3s forwards steps(26),
                blink 0.5s infinite;
 }
+.elContentor{
+    position: relative;
+    will-change: background-color;
+    width: 100%;
+}
+img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+h2{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: calc(10px + 1.5vw);
+    margin-top: 20px;
+    font-weight: 900;
+    margin-left: 30px;
+}
+.triggerImage{
+    position: relative;
+    width: 100%;
+    height: 50svh;
+    overflow: hidden;
+}
+.triggerWrapper{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-5deg);
+    width: 150%;
+    height: 300px;
+}
+.triggerItems{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-75%, -50%);
+    width: 200%;
+    height: 50%;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    will-change: transform;
+}
+.triggerItemImage{
+    flex: 1;
+    width: 100%;
+    aspect-ratio: 5/3;
+}
+.horizontal-scroll{
+    position: relative;
+    width: 100%;
+    height: 100dvh;
+    overflow: hidden;
+}
+.horizontal-scrollWrapper{
+    position: relative;
+    width: 300%;
+    height: 100dvh;
+    display: flex;
+    will-change: transform;
+}
 @keyframes blink {
     0%{
         border-color: transparent;
