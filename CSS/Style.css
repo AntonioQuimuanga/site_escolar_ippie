@@ -692,7 +692,7 @@ footer{
     text-align: center;
     width: 100%;
 }
-#nossos_cursos_Slider h4{
+#nossos_cursos_Slider p{
     margin-left: 50%;
     transform: translate(-50%);
     width: 80%;
