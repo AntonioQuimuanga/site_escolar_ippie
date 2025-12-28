@@ -528,23 +528,22 @@
             // Integração com LocomotiveScroll (se disponível) — caso contrário usa Lenis fallback
             if (typeof LocomotiveScroll !== 'undefined') {
                 // Inicializa Locomotive
-                const scrollerEl = document.querySelector('[data-scroll-container]');
                 const loco = new LocomotiveScroll({
                     el: scrollerEl,
                     smooth: true,
                     inertia: 0.9
                 });
+                // expose global reference for other handlers
+                window.loco = loco;
 
                 // Informar ao ScrollTrigger como obter/definir a posição de scroll.
                 // Usa acessores resilientes para diferentes versões do Locomotive.
                 ScrollTrigger.scrollerProxy(scrollerEl, {
                     scrollTop(value) {
                         if (arguments.length) {
-                            // setter -> tenta usar api de scrollTo do loco
                             try { loco.scrollTo(value); } catch(e) { /* fallback silencioso */ }
                             return;
                         }
-                        // getter -> tenta várias propriedades possíveis dependendo da versão
                         try {
                             return (loco.scroll && loco.scroll.instance && loco.scroll.instance.scroll && loco.scroll.instance.scroll.y)
                                 || (loco.instance && loco.instance.scroll && loco.instance.scroll.y)
@@ -593,6 +592,8 @@
                         }
                     }, { passive: false });
                 }
+                // indicate no locomotive present
+                window.loco = null;
                 ScrollTrigger.refresh();
             }
 
@@ -612,7 +613,7 @@
             gsap.to(".triggerItems", {
                 scrollTrigger:{
                     trigger: ".triggerImage",
-                    scroller: document.querySelector('[data-scroll-container]'),
+                    scroller: scrollerEl,
                     start: "top bottom",
                     end: "top top",
                     scrub: true,
@@ -626,6 +627,38 @@
                     },
                 },
             })
+            // Horizontal scroll handler: anima a wrapper horizontal usando o scroll vertical
+            (function(){
+                const horizontal = document.querySelector('.horizontal-scroll');
+                const wrapper = document.querySelector('.horizontal-scrollWrapper');
+                if(!horizontal || !wrapper) return;
+
+                function getTotal() {
+                    return wrapper.scrollWidth - window.innerWidth;
+                }
+
+                gsap.to(wrapper, {
+                    x: () => `-${getTotal()}px`,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: horizontal,
+                        scroller: scrollerEl,
+                        start: 'top top',
+                        end: () => `+=${getTotal()}`,
+                        scrub: true,
+                        pin: true,
+                        pinSpacing: false,
+                        invalidateOnRefresh: true,
+                        // markers: true,
+                    }
+                });
+
+                // ensure updates when refresh happens
+                ScrollTrigger.addEventListener('refreshInit', () => {
+                    if (window.loco && typeof window.loco.update === 'function') window.loco.update();
+                });
+                ScrollTrigger.refresh();
+            })();
             let pinnedTriggerImageClone = null;
             let isImageCloneActive = false;
 
