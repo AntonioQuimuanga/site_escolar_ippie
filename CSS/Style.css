@@ -27,7 +27,7 @@
   font-display: swap;
 }
 li:hover{
-    cursor: url('../Cursor/Link.cur'), auto;
+    cursor: url('../Cursor/Link.cur'), pointer;
 }
 ::selection{
     background-color: #ffffff;
@@ -42,7 +42,7 @@ strong{
 a{
     color: #ffffff;
     text-decoration: none;
-    cursor: url('../Cursor/Link.cur'), auto;
+    cursor: url('../Cursor/Link.cur'), pointer;
 }
 /* ALTERAÇÃO: esconder/neutralizar a scrollbar nativa
      - reduzir a largura para 1px não impede que o browser use a scrollbar
@@ -67,7 +67,7 @@ body{
     */
     overflow-x: hidden;
     overflow-y: auto;
-    cursor: url('../Cursor/Pointer.cur'), auto;
+    cursor: url('/Cursor/Normal.cur'), auto;
     background-color: #000000;
     color: #ffffff;
     font-family: 'Poppins', sans-serif;
@@ -437,7 +437,7 @@ header .mainLinks{
     left: 0;
 }
 #dots li{
-    cursor: url('../Cursor/Link.cur'), auto;
+    cursor: url('../Cursor/Link.cur'), pointer;
     background: #ffffff65;
     list-style: none;
     backdrop-filter: blur(2px);

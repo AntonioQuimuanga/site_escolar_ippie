@@ -60,16 +60,52 @@ dots.forEach((li, key) =>{
         reloadSlider();
     })
 });
-// ALTERAÇÃO: corrigido IntersectionObserver (antes havia erro de sintaxe)
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('show');
-        } else {
-            entry.target.classList.remove('show');
-        }
-    });
-}, { threshold: 1 });
+// ALTERAÇÃO: IntersectionObserver falha quando um scroller custom (ex: Locomotive)
+// aplica transform no container. Se houver Locomotive ou ScrollTrigger disponível,
+// usamos ScrollTrigger para disparar as classes; caso contrário, usamos IntersectionObserver.
+const hiddenElements = Array.from(document.querySelectorAll('.hidden'));
+const scrollerEl = document.querySelector('[data-scroll-container]');
 
-const hiddenElements = document.querySelectorAll('.hidden');
-hiddenElements.forEach((el) => observer.observe(el));
+function createIntersectionFallback(elements) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+            } else {
+                entry.target.classList.remove('show');
+            }
+        });
+    }, { threshold: 0.2, rootMargin: '0px 0px -10% 0px' });
+    elements.forEach(el => observer.observe(el));
+}
+
+function createScrollTriggerFor(elements) {
+    if (typeof ScrollTrigger === 'undefined') return createIntersectionFallback(elements);
+    elements.forEach(el => {
+        if (el._hiddenTriggerCreated) return;
+        ScrollTrigger.create({
+            trigger: el,
+            scroller: scrollerEl || undefined,
+            start: 'top 80%',
+            end: 'bottom 20%',
+            onEnter: () => el.classList.add('show'),
+            onEnterBack: () => el.classList.add('show'),
+            onLeave: () => el.classList.remove('show'),
+            onLeaveBack: () => el.classList.remove('show'),
+            once: false
+        });
+        el._hiddenTriggerCreated = true;
+    });
+}
+
+// If ScrollTrigger exists, wait for a refresh (which is called after scrollerProxy is set)
+if (typeof ScrollTrigger !== 'undefined') {
+    // try to create now, but prefer to run after refresh to ensure scrollerProxy is ready
+    createScrollTriggerFor(hiddenElements);
+    ScrollTrigger.addEventListener && ScrollTrigger.addEventListener('refresh', () => createScrollTriggerFor(hiddenElements));
+    // also run after DOMContentLoaded to be safe
+    document.addEventListener('DOMContentLoaded', () => createScrollTriggerFor(hiddenElements));
+} else {
+    // no ScrollTrigger available — use IntersectionObserver fallback
+    createIntersectionFallback(hiddenElements);
+}

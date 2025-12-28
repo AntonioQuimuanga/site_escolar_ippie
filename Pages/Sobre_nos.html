@@ -652,6 +652,16 @@
                         // markers: true,
                     }
                 });
+                let pinnedTriggerImageClone = null;
+                let isImgCloneActive = false;
+                function ceatePinnesdTriggerImageClone(){
+                    if(isCloneActive) return;
+
+                    const originalTriggerImage = document.querySelector(".triggerItemImage.pin img");
+                    const rect = originalTriggerImage.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                }
 
                 // ensure updates when refresh happens
                 ScrollTrigger.addEventListener('refreshInit', () => {
