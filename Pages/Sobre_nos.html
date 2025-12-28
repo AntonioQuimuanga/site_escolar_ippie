@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="icon" href="../Images/LogoIPPIE.png">
-    <title>IPPIE | HOME</title>
+    <title>Sobre Nós | HOME</title>
 </head>
 <body>
     <!-- cabeçalho do site -->
@@ -136,20 +136,17 @@
             <div class="triggerWrapper">
                 <div class="triggerItems">
                     <div class="triggerItemImage"><img src="../Images/students_watching_a_lesson.jpeg" alt=""></div>
-                    <div class="triggerItemImage"><img src="../Images/Olhando para a Camara.webp" alt=""></div>
                     <div class="triggerItemImage"><img src="../Images/Jovem na Biblioteca.jpg" alt=""></div>
-                    <div class="triggerItemImage"><img src="../Images/Aula 2.webp" alt=""></div>
+                    <div class="triggerItemImage"><img src="../Images/Capa.webp" alt=""></div>
                     <div class="triggerItemImage"><img src="../Images/another_enginer.jpeg" alt=""></div>
                     <div class="triggerItemImage"><img src="../Images/students.jpeg" alt=""></div>
                     <div class="triggerItemImage"><img src="../Images/students_in_the_class.jpeg" alt=""></div>
+                    <div class="triggerItemImage pin"><img src="../Images/Mecanica.webp" alt=""></div>
                     <div class="triggerItemImage"><img src="../Images/students_out_of_class.jpeg" alt=""></div>
-                    <div class="triggerItemImage"><img src="../Images/2 Mecânicos na Oficina.jpeg" alt=""></div>
-                    <div class="triggerItemImage"><img src="../Images/Eletricistas.jpeg" alt=""></div>
+                    <div class="triggerItemImage"><img src="../Images/2 Mecânicos na Oficina.webp" alt=""></div>
+                    <div class="triggerItemImage"><img src="../Images/Eletricistas.webp" alt=""></div>
                     <div class="triggerItemImage"><img src="../Images/488658548_3929464320703118_978380142872206987_n.jpg" alt=""></div>
-                    <div class="triggerItemImage"><img src="../Images/488883767_3929464327369784_56741557954827234_n.jpg" alt=""></div>
                     <div class="triggerItemImage"><img src="../Images/students_watching_a_lesson.jpeg" alt=""></div>
-                    <div class="triggerItemImage"><img src="../Images/Mecanica.webp" alt=""></div>
-                    <div class="triggerItemImage"><img src="../Images/Capa.webp" alt=""></div>
                     <div class="triggerItemImage"><img src="../Images/Mecânico no Torno.webp" alt=""></div>
                 </div>
             </div>
@@ -307,6 +304,8 @@
     </div>
     <!-- Importação de Bibliotecas de Animaçoes e Scirpt's de funções -->
     <script src="../Libs/gsap.min.js"></script>
+    <script src="../Libs/Flip.min.js"></script>
+    <script src="../Libs/lenis.min.js"></script>
     <script src="../Libs/ScrollTrigger.min.js"></script>
     <script src="../Libs/locomotive-scroll.min.js"></script>
     <script src="../JS/Index.js"></script>
@@ -336,23 +335,22 @@
     }
 
     // Observador para detectar entrada e saída do viewport
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const el = entry.target;
-        el.isVisible = entry.isIntersecting;
+        <!-- ALTERAÇÃO: renomeado observer para evitar conflito global -->
+        const contadorObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const el = entry.target;
+                el.isVisible = entry.isIntersecting;
 
-        if (entry.isIntersecting) {
-          // inicia contagem quando entra na tela
-          startCounting(el);
-        } else {
-          // reseta quando sai
-          if (el._interval) clearInterval(el._interval);
-          el.textContent = '0';
-        }
-      });
-    }, { threshold: 0.6 });
+                if (entry.isIntersecting) {
+                    startCounting(el);
+                } else {
+                    if (el._interval) clearInterval(el._interval);
+                    el.textContent = '0';
+                }
+            });
+        }, { threshold: 0.6 });
 
-    contador.forEach(counter => observer.observe(counter));
+        contador.forEach(counter => contadorObserver.observe(counter));
   </script>
     <!-- Animações do loader e de texto -->
     <script>
@@ -497,14 +495,149 @@
                 }
             });
     </script>
-    <!-- Script do Locomotivescroll (rolagem suave) -->
     <script>
-        const rolar = new LocomotiveScroll({
-            el: document.querySelector('[data-scroll-container]'),
-            smooth: true,
-            multiplier: 1,
-            inertia: 0.09
+        document.addEventListener("DOMContentLoaded", function() {
+            const triggerItems = document.querySelectorAll(".triggerItemImage");
+
+            triggerItems.forEach(item => {
+                item.addEventListener("mouseenter", () => {
+                    gsap.to(item, {
+                        scale: 1.1,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                });
+
+                item.addEventListener("mouseleave", () => {
+                    gsap.to(item, {
+                        scale: 1,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                });
+            });
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.registerPlugin(ScrollTrigger);
+            gsap.registerPlugin(Flip);
+            // elemento que representa o scroller (usado pelo scrollerProxy)
+            const scrollerEl = document.querySelector('[data-scroll-container]');
+
+            // Integração com LocomotiveScroll (se disponível) — caso contrário usa Lenis fallback
+            if (typeof LocomotiveScroll !== 'undefined') {
+                // Inicializa Locomotive
+                const scrollerEl = document.querySelector('[data-scroll-container]');
+                const loco = new LocomotiveScroll({
+                    el: scrollerEl,
+                    smooth: true,
+                    inertia: 0.9
+                });
+
+                // Informar ao ScrollTrigger como obter/definir a posição de scroll.
+                // Usa acessores resilientes para diferentes versões do Locomotive.
+                ScrollTrigger.scrollerProxy(scrollerEl, {
+                    scrollTop(value) {
+                        if (arguments.length) {
+                            // setter -> tenta usar api de scrollTo do loco
+                            try { loco.scrollTo(value); } catch(e) { /* fallback silencioso */ }
+                            return;
+                        }
+                        // getter -> tenta várias propriedades possíveis dependendo da versão
+                        try {
+                            return (loco.scroll && loco.scroll.instance && loco.scroll.instance.scroll && loco.scroll.instance.scroll.y)
+                                || (loco.instance && loco.instance.scroll && loco.instance.scroll.y)
+                                || (loco.scroll && loco.scroll.y)
+                                || 0;
+                        } catch (err) { return 0; }
+                    },
+                    getBoundingClientRect() {
+                        return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+                    },
+                    pinType: scrollerEl.style.transform ? 'transform' : 'fixed'
+                });
+
+                // Atualiza o ScrollTrigger quando o Locomotive rola
+                loco.on('scroll', ScrollTrigger.update);
+
+                // Atualiza o Locomotive quando o ScrollTrigger faz refresh
+                ScrollTrigger.addEventListener('refresh', () => loco.update());
+
+                // força um refresh inicial
+                ScrollTrigger.refresh();
+            } else {
+                // Fallback para Lenis (se Locomotive não estiver incluído)
+                const lenis = (typeof Lenis !== 'undefined') ? new Lenis() : null;
+                if (lenis) {
+                    function lenisRaf(time){
+                        lenis.raf(time);
+                        ScrollTrigger.update();
+                        requestAnimationFrame(lenisRaf);
+                    }
+                    requestAnimationFrame(lenisRaf);
+
+                    // wheel -> lenis
+                    window.addEventListener('wheel', (e) => {
+                        try {
+                            if (!lenis || typeof lenis.scrollTo !== 'function') return;
+                            if (e.ctrlKey) return;
+                            e.preventDefault();
+                            const factor = 0.7;
+                            const delta = e.deltaY * factor;
+                            const currentY = window.scrollY || document.documentElement.scrollTop || 0;
+                            const targetY = currentY + delta;
+                            lenis.scrollTo(targetY, { duration: 0.4 });
+                        } catch (err) {
+                            console.warn('wheel -> lenis error', err);
+                        }
+                    }, { passive: false });
+                }
+                ScrollTrigger.refresh();
+            }
+
+            const lightColor = getComputedStyle(document.documentElement)
+            .getPropertyValue("--light")
+            .trim();
+            const darkColor = getComputedStyle(document.documentElement)
+            .getPropertyValue("--dark")
+            .trim();
+            function interpolateColor(color1, color2, factor) {
+                return gsap.utils.interpolate(color1, color2, factor);
+            };
+            // ATENÇÃO: quando usamos Locomotive como scroller, devemos informar
+            // explicitamente o `scroller` no ScrollTrigger para que os gatilhos
+            // calculem start/end corretamente. Também deixei `markers:true` temporário
+            // para depuração (remova em produção).
+            gsap.to(".triggerItems", {
+                scrollTrigger:{
+                    trigger: ".triggerImage",
+                    scroller: document.querySelector('[data-scroll-container]'),
+                    start: "top bottom",
+                    end: "top top",
+                    scrub: true,
+                    // markers: true, // habilite para depurar start/end
+                    onUpdate: (self) => {
+                        const progress = self.progress;
+                        const xPosition = -75 + progress * 25;
+                        gsap.set(".triggerItems", {
+                            x: `${xPosition}%`,
+                        });
+                    },
+                },
+            })
+            let pinnedTriggerImageClone = null;
+            let isImageCloneActive = false;
+
+            <!-- ALTERAÇÃO: selector ajustado para corresponder à estrutura (.triggerItemImage.pin) -->
+            function createPinnedTriggerImageClone(){
+                if(isImageCloneActive) return;
+
+                const originalTriggerImage = document.querySelector(".triggerItemImage.pin");
+                if(!originalTriggerImage) return;
+            }
+        });
+    </script>
+    <!-- Script do Locomotivescroll removido (inicialização é feita no bloco acima) -->
 </body>
 </html>

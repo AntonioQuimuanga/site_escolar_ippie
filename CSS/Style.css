@@ -44,17 +44,43 @@ a{
     text-decoration: none;
     cursor: url('../Cursor/Link.cur'), auto;
 }
+/* ALTERAÇÃO: esconder/neutralizar a scrollbar nativa
+     - reduzir a largura para 1px não impede que o browser use a scrollbar
+     - para que Lenis (ou outro smooth scroller) controle a rolagem visualmente,
+         ocultamos a scrollbar e suprimimos o overflow nativo.
+     - ATENÇÃO: isto pode afetar acessibilidade e navegação por teclado; ver notas abaixo. */
+/* WebKit (Chrome, Safari) */
+::-webkit-scrollbar{
+        display: none; /* remove visualmente a scrollbar nativa */
+}
+/* Firefox */
+html { scrollbar-width: none; }
+
 html,
 body{
     width: 100%;
-    height: 100vh;
+    height: 100%;
+    /* ALTERAÇÃO: restaurar rolagem vertical nativa (wheel / touch / dois dedos)
+       - mantemos a barra visualmente oculta com ::-webkit-scrollbar and scrollbar-width
+       - `overflow-y: auto` permite que wheel/trackpad/touch funcionem novamente
+       - `overflow-x: hidden` evita scroll horizontal indesejado
+    */
     overflow-x: hidden;
+    overflow-y: auto;
     cursor: url('../Cursor/Pointer.cur'), auto;
     background-color: #000000;
     color: #ffffff;
     font-family: 'Poppins', sans-serif;
     transition: all.55s ease-in-out;
 }
+
+/* NOTAS:
+     - Com `overflow: hidden` a thumb da scrollbar desaparece e o browser não aplicará
+         scroll diretamente ao documento; Lenis (ou outro motor) deve responder a wheel/touch
+         e chamar `lenis.scrollTo()` ou `lenis.raf()` para mover a página.
+     - Acessibilidade: remova ou ajuste esta regra se depender de navegação por teclado
+         (PageUp/PageDown, Home/End) — pode ser necessário mapear teclas para `lenis.scrollTo()`.
+*/
 header{
     z-index: 1000;
     backdrop-filter: blur(5px);

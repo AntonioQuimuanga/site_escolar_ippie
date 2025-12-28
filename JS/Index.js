@@ -60,19 +60,16 @@ dots.forEach((li, key) =>{
         reloadSlider();
     })
 });
-const observer = new IntersectionObserver((entries) =>{
-    entries.forEach((entry) =>{
-        console.log(entry) 
-        if(entry.isIntersecting){
+// ALTERAÇÃO: corrigido IntersectionObserver (antes havia erro de sintaxe)
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
             entry.target.classList.add('show');
+        } else {
+            entry.target.classList.remove('show');
         }
-        else{
-            entry.target.classList.remove('show')
-        }
-        
-});
-threshold: 1
-});
+    });
+}, { threshold: 1 });
 
 const hiddenElements = document.querySelectorAll('.hidden');
 hiddenElements.forEach((el) => observer.observe(el));

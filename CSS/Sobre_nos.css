@@ -1,3 +1,7 @@
+:root{
+    --cor-light: #004aad;
+    --cor-dark: #002f6c;
+}
 .container h1{
     font-family: 'Courier New', Courier, monospace;
     margin-top: 100px;
@@ -67,6 +71,18 @@ h2{
     height: 100dvh;
     overflow: hidden;
 }
+.horizontal-scroll .scrollHorizontal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.horizontal-scroll .scrollHorizontal h2,
+.horizontal-scroll .scrollHorizontal img{
+    width: 75%;
+}
+.horizontal-scroll .scrollHorizontal img{
+    height: 75%;
+}
 .horizontal-scrollWrapper{
     position: relative;
     width: 300%;
@@ -74,6 +90,25 @@ h2{
     display: flex;
     will-change: transform;
 }
+.horizontal-slide{
+    flex: 1;
+    height: 100%;
+    display: flex;
+    gap: 1rem;
+    padding: 2rem;
+}
+.horizontal-slide:not(.horizontal-spacer){
+    flex-direction: column;
+    background-color: var(--cor-light);
+    color: var(--cor-dark);
+}
+.horizontal-slide .scrollHorizontal:nth-child(1){
+    flex: 3;
+}
+.horizontal-slide .scrollHorizontal:nth-child(2){
+    flex: 2;
+}
+
 @keyframes blink {
     0%{
         border-color: transparent;
@@ -88,5 +123,10 @@ h2{
     .container h1{
         font-size: calc(15px + 2vw);
         width: 26ch;
+    }
+}
+@media screen and (max-width: 1000px){
+    .triggerWrapper{
+        width: 300%;
     }
 }
