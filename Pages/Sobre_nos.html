@@ -525,8 +525,8 @@
             // elemento que representa o scroller (usado pelo scrollerProxy)
             const scrollerEl = document.querySelector('[data-scroll-container]');
 
-            // Integração com LocomotiveScroll (se disponível) — caso contrário usa Lenis fallback
-            if (typeof LocomotiveScroll !== 'undefined') {
+            // Integração com LocomotiveScroll (se disponível e em telas grandes) — caso contrário usa Lenis fallback
+            if (window.innerWidth > 768 && typeof LocomotiveScroll !== 'undefined') {
                 // Inicializa Locomotive
                 const loco = new LocomotiveScroll({
                     el: scrollerEl,
@@ -567,7 +567,7 @@
                 ScrollTrigger.refresh();
             } else {
                 // Fallback para Lenis (se Locomotive não estiver incluído)
-                const lenis = (typeof Lenis !== 'undefined') ? new Lenis() : null;
+                const lenis = (typeof Lenis !== 'undefined' && window.innerWidth > 768) ? new Lenis() : null;
                 if (lenis) {
                     function lenisRaf(time){
                         lenis.raf(time);
@@ -575,6 +575,19 @@
                         requestAnimationFrame(lenisRaf);
                     }
                     requestAnimationFrame(lenisRaf);
+
+                    // Configurar ScrollTrigger para usar Lenis como scroller
+                    ScrollTrigger.scrollerProxy(window, {
+                        scrollTop(value) {
+                            if (arguments.length) {
+                                lenis.scrollTo(value);
+                            }
+                            return lenis.scroll;
+                        },
+                        getBoundingClientRect() {
+                            return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+                        }
+                    });
 
                     // wheel -> lenis
                     window.addEventListener('wheel', (e) => {
@@ -597,6 +610,15 @@
                 ScrollTrigger.refresh();
             }
 
+            // Define o scroller para ScrollTrigger (Locomotive usa scrollerEl, Lenis usa window, mobile usa window nativo)
+            const scroller = window.loco ? scrollerEl : window;
+            console.log('Scroller usado:', window.loco ? 'Locomotive' : (lenis ? 'Lenis' : 'Nativo'));
+
+            // Atualizar ScrollTrigger em mudanças de tamanho de tela (ex: rotação de dispositivo)
+            window.addEventListener('resize', () => {
+                ScrollTrigger.refresh();
+            });
+
             const lightColor = getComputedStyle(document.documentElement)
             .getPropertyValue("--light")
             .trim();
@@ -613,7 +635,7 @@
             gsap.to(".triggerItems", {
                 scrollTrigger:{
                     trigger: ".triggerImage",
-                    scroller: scrollerEl,
+                    scroller: scroller,
                     start: "top bottom",
                     end: "top top",
                     scrub: true,
@@ -627,8 +649,58 @@
                     },
                 },
             })
+            // Variáveis e funções para o clone da imagem pinned
+            let pinnedTriggerImageClone = null;
+            let isImgCloneActive = false;
+            function createPinnedTriggerImageClone(){
+                if(isImgCloneActive) return;
+                console.log("Criando clone da imagem pinned");
+
+                const originalTriggerImage = document.querySelector(".triggerItemImage.pin img");
+                if(!originalTriggerImage) return;
+
+                pinnedTriggerImageClone = originalTriggerImage.cloneNode(true);
+
+                gsap.set(pinnedTriggerImageClone, {
+                    position: 'fixed',
+                    left: '50%',
+                    top: '50%',
+                    x: '-50%',
+                    y: '-50%',
+                    rotation: -5,
+                    width: originalTriggerImage.offsetWidth + "px",
+                    height: originalTriggerImage.offsetHeight + "px",
+                    zIndex: 9999,
+                    pointerEvents: 'none',
+                });
+                
+                document.body.appendChild(pinnedTriggerImageClone);
+                // Original fica visível, clone é fixado no centro
+                isImgCloneActive = true;
+            }
+            function removePinnedTriggerImageClone(){
+                console.log("Removendo clone da imagem pinned");
+                if(!isImgCloneActive) return;
+                if(pinnedTriggerImageClone){
+                    pinnedTriggerImageClone.remove();
+                    pinnedTriggerImageClone = null;
+                }
+                // Original já estava visível
+                isImgCloneActive = false;
+            }
+            // ScrollTrigger para ativar o clone da imagem (aparece quando .pin chega ao centro, desaparece ao sair ou rolar para cima)
+            ScrollTrigger.create({
+                trigger: ".triggerItemImage.pin",
+                scroller: scroller,
+                start: "center center",
+                end: () => "+=" + (window.innerHeight * 5),
+                onEnter: createPinnedTriggerImageClone,
+                onLeave: removePinnedTriggerImageClone,
+                onLeaveBack: removePinnedTriggerImageClone,
+            });
             // Horizontal scroll handler: anima a wrapper horizontal usando o scroll vertical
             (function(){
+                if (window.innerWidth <= 768) return;
                 const horizontal = document.querySelector('.horizontal-scroll');
                 const wrapper = document.querySelector('.horizontal-scrollWrapper');
                 if(!horizontal || !wrapper) return;
@@ -642,7 +714,7 @@
                     ease: 'none',
                     scrollTrigger: {
                         trigger: horizontal,
-                        scroller: scrollerEl,
+                        scroller: scroller,
                         start: 'top top',
                         end: () => `+=${getTotal()}`,
                         scrub: true,
@@ -652,33 +724,13 @@
                         // markers: true,
                     }
                 });
-                let pinnedTriggerImageClone = null;
-                let isImgCloneActive = false;
-                function ceatePinnesdTriggerImageClone(){
-                    if(isCloneActive) return;
-
-                    const originalTriggerImage = document.querySelector(".triggerItemImage.pin img");
-                    const rect = originalTriggerImage.getBoundingClientRect();
-                    const centerX = rect.left + rect.width / 2;
-                    const centerY = rect.top + rect.height / 2;
-                }
-
+                <!-- Correção: Removido código duplicado. As funções e ScrollTrigger foram movidos para fora da IIFE para funcionar em mobile. -->
                 // ensure updates when refresh happens
                 ScrollTrigger.addEventListener('refreshInit', () => {
                     if (window.loco && typeof window.loco.update === 'function') window.loco.update();
                 });
                 ScrollTrigger.refresh();
             })();
-            let pinnedTriggerImageClone = null;
-            let isImageCloneActive = false;
-
-            <!-- ALTERAÇÃO: selector ajustado para corresponder à estrutura (.triggerItemImage.pin) -->
-            function createPinnedTriggerImageClone(){
-                if(isImageCloneActive) return;
-
-                const originalTriggerImage = document.querySelector(".triggerItemImage.pin");
-                if(!originalTriggerImage) return;
-            }
         });
     </script>
     <!-- Script do Locomotivescroll removido (inicialização é feita no bloco acima) -->
