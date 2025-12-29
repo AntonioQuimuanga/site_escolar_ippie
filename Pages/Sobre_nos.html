@@ -620,11 +620,12 @@
             });
 
             const lightColor = getComputedStyle(document.documentElement)
-            .getPropertyValue("--light")
+            .getPropertyValue("--cor-light")
             .trim();
             const darkColor = getComputedStyle(document.documentElement)
-            .getPropertyValue("--dark")
+            .getPropertyValue("--cor-dark")
             .trim();
+            // Nota: As variáveis CSS são --cor-light e --cor-dark, definidas em Sobre_nos.css
             function interpolateColor(color1, color2, factor) {
                 return gsap.utils.interpolate(color1, color2, factor);
             };
@@ -645,6 +646,12 @@
                         const xPosition = -75 + progress * 25;
                         gsap.set(".triggerItems", {
                             x: `${xPosition}%`,
+                        });
+                        // Animação da cor de fundo do .elContentor com transição suave
+                        gsap.to(".elContentor", {
+                            backgroundColor: interpolateColor(lightColor, darkColor, progress),
+                            duration: 0.3, // Transição suave de 0.3s
+                            ease: "power2.out"
                         });
                     },
                 },
@@ -675,17 +682,25 @@
                 });
                 
                 document.body.appendChild(pinnedTriggerImageClone);
-                // Original fica visível, clone é fixado no centro
+                // Ocultar a original com transição suave
+                gsap.to(originalTriggerImage, { opacity: 0, duration: 0.5 });
+                // Aparecer o clone com transição
+                gsap.fromTo(pinnedTriggerImageClone, { opacity: 0 }, { opacity: 1, duration: 0.5 });
                 isImgCloneActive = true;
             }
             function removePinnedTriggerImageClone(){
                 console.log("Removendo clone da imagem pinned");
                 if(!isImgCloneActive) return;
-                if(pinnedTriggerImageClone){
-                    pinnedTriggerImageClone.remove();
-                    pinnedTriggerImageClone = null;
-                }
-                // Original já estava visível
+                // Desaparecer o clone com transição
+                gsap.to(pinnedTriggerImageClone, { opacity: 0, duration: 0.5, onComplete: () => {
+                    if(pinnedTriggerImageClone) {
+                        pinnedTriggerImageClone.remove();
+                        pinnedTriggerImageClone = null;
+                    }
+                }});
+                // Mostrar a original com transição
+                const originalTriggerImage = document.querySelector(".triggerItemImage.pin img");
+                if(originalTriggerImage) gsap.to(originalTriggerImage, { opacity: 1, duration: 0.5 });
                 isImgCloneActive = false;
             }
             // ScrollTrigger para ativar o clone da imagem (aparece quando .pin chega ao centro, desaparece ao sair ou rolar para cima)
@@ -698,6 +713,70 @@
                 onLeave: removePinnedTriggerImageClone,
                 onLeaveBack: removePinnedTriggerImageClone,
             });
+
+            let flipAnimation = null;
+
+            ScrollTrigger.create({
+                trigger: ".horizontal-scroll",
+                start: "top 50%",
+                end: () => `+=${window.innerHeight * 5.5}`,
+                onEnter: () => {
+                    if(pinnedTriggerImageClone && isImgCloneActive && !flipAnimation){
+                        const state = Flip.getState(pinnedTriggerImageClone);
+                        gsap.set(pinnedTriggerImageClone, {
+                            position: 'fixed',
+                            left: "0px",
+                            top: "0px",
+                            width: "100%",
+                            height: "100vh",
+                            transform: "rotate(0deg)",
+                            transformOrigin: "center center",
+                        });
+
+                        flipAnimation = Flip.from(state, {
+                            duration: 1,
+                            ease: "none",
+                            paused: true
+                        });
+                    }
+                },
+                onLeaveBack: () => {
+                    if(flipAnimation){
+                        flipAnimation.kill();
+                        flipAnimation = null;
+                    }
+                    gsap.set(".TriggerItemImage", {
+                        backgroundColor: lightColor,
+                    });
+                    gsap.set(".horizontal-scrollWrapper",{
+                        x: "0%"
+                    });
+                },
+            });
+            ScrollTrigger.create({
+                trigger:".horizontal-scroll",
+                start: "top 50%",
+                end: () => `+=${window.innerHeight * 5.5}`,
+                onUpdate: (self) => {
+                    const progress = self.progress;
+
+                    if(progress <= 0.05){
+                        const bgColor = Math.min(progress / 0.05, 1);
+                        const newBgColor = interpolateColor(
+                            lightColor,
+                            darkColor,
+                            bgColorProgress
+                        );
+                        gsap.set(".elContentor", {
+                            backgroundColor: newBgColor,
+                        });
+                    } else if (progress > 0.05){
+                        gsap.set(".elContentor", {
+                            backgroundColor: darkColor,
+                        });
+                    }
+                },
+            })
             // Horizontal scroll handler: anima a wrapper horizontal usando o scroll vertical
             (function(){
                 if (window.innerWidth <= 768) return;
