@@ -27,7 +27,7 @@
   font-display: swap;
 }
 li:hover{
-    cursor: url('../Cursor/Link.cur'), pointer;
+    cursor: url("../Cursor/Link.cur"), pointer;
 }
 ::selection{
     background-color: #ffffff;
@@ -67,8 +67,8 @@ body{
     */
     overflow-x: hidden;
     overflow-y: auto;
-    cursor: url('/Cursor/Normal.cur'), auto;
     background-color: #000000;
+    cursor: url("../Cursor/Normal.cur"), auto;
     color: #ffffff;
     font-family: 'Poppins', sans-serif;
     transition: all.55s ease-in-out;
@@ -209,7 +209,7 @@ header .mainLinks{
 #abrir-menu{
     position: fixed;
     fill: #ffffff;
-    cursor: url('../Cursor/Link.cur'), auto;
+    cursor: url("../Cursor/Link.cur"), auto;
     margin-left: 90%;
     cursor: pointer;
     height: 30px;
@@ -385,7 +385,7 @@ header .mainLinks{
 #buttons button{
     z-index: 2000;
     cursor: pointer;
-    cursor: url('/Cursor/Link.cur'), auto;
+    cursor: url("../Cursor/Link.cur"), auto;
     width: 35px;
     height: 35px;
     border: none;
@@ -437,7 +437,7 @@ header .mainLinks{
     left: 0;
 }
 #dots li{
-    cursor: url('../Cursor/Link.cur'), pointer;
+    cursor: url("../Cursor/Link.cur"), pointer;
     background: #ffffff65;
     list-style: none;
     backdrop-filter: blur(2px);
@@ -681,7 +681,7 @@ footer{
     width: 30px;
     border-radius: 50px;
     height: 30px;
-    cursor: url('../Cursor/Link.cur'), auto;
+    cursor: url("../Cursor/Link.cur"), auto;
 }
 /* Slider infinito das imagens da escola */
 #nossos_cursos_Slider{
